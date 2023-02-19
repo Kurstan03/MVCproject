@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Departments</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+          crossorigin="anonymous">
+</head>
+<body>
+<table class="table">
+    <thead class="table-dark">
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Doctors</th>
+        <th scope="col">Update</th>
+        <th scope="col">Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="department:${departments}">
+        <th scope="row">1</th>
+        <td th:text="${department.getName()}"></td>
+        <td></td>
+        <td>
+            <a th:href="@{/{id}/departments/{departmentId}/edit(id=${id}, departmentId=${department.getId()})}">
+                <input type="submit" class="btn btn-outline-primary"  th:value="  Update  ">
+            </a>
+        </td>
+        <td>
+            <form th:method="DELETE" th:action="@{/{id}/departments/{departmentId}/delete(id=${id}, departmentId=${department.getId()})}">
+                <input type="submit" class="btn btn-outline-primary"  th:value="  Delete  ">
+            </form>
+        </td>
+    </tr>
+    <tr>
+        <th scope="row">2</th>
+        <td>Jacob</td>
+        <td>Thornton</td>
+        <td>@fat</td>
+    </tr>
+    <tr>
+        <th scope="row">3</th>
+        <td colspan="2">Larry the Bird</td>
+        <td>@twitter</td>
+    </tr>
+    </tbody>
+</table>
+<p style="text-align:center;">
+    <a class="btn btn-outline-primary" role="button" th:href="@{/{id}/departments/new(id=${id})}">Add new department</a>
+</p>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+</html>
