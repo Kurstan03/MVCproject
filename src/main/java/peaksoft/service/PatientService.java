@@ -1,5 +1,6 @@
 package peaksoft.service;
 
+import peaksoft.entity.Appointment;
 import peaksoft.entity.Patient;
 
 import java.util.List;
@@ -17,4 +18,6 @@ public interface PatientService {
     void update(Long patientId, Patient patient);
 
     void delete(Long patientId);
+
+    List<Appointment> getAppointments(Long id, Long patientId);
 }

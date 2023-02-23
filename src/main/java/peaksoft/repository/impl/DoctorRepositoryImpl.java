@@ -4,11 +4,14 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
+import peaksoft.entity.Appointment;
+import peaksoft.entity.Department;
 import peaksoft.entity.Doctor;
 import peaksoft.entity.Hospital;
 import peaksoft.repository.DoctorRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author kurstan
@@ -34,13 +37,15 @@ public class DoctorRepositoryImpl implements DoctorRepository {
                 .getSingleResult();
         hospital.addDoctor(doctor);
         doctor.setHospital(hospital);
-        entityManager.persist(doctor);
+        entityManager.merge(doctor);
     }
 
     @Override
-    public Doctor findById(Long doctorId) {
-        return entityManager.createQuery("from Doctor where id = :id", Doctor.class)
-                .setParameter("id", doctorId).getSingleResult();
+    public Optional<Doctor> findById(Long doctorId) {
+//        return entityManager.createQuery("from Doctor where id = :id", Doctor.class)
+//                .setParameter("id", doctorId).getSingleResult();
+        Doctor doctor = entityManager.find(Doctor.class, doctorId);
+        return Optional.ofNullable(doctor);
     }
 
     @Override
@@ -56,9 +61,41 @@ public class DoctorRepositoryImpl implements DoctorRepository {
     }
 
     @Override
-    public void delete(Long doctorId) {
-        entityManager.remove(
-                entityManager.createQuery("from Doctor where id = :id", Doctor.class)
-                        .setParameter("id", doctorId).getSingleResult());
+    public void delete(Long doctorId, Hospital hospital) {
+//        entityManager.merge(hospital);
+//        entityManager.remove(
+//                entityManager.createQuery("from Doctor where id = :id", Doctor.class)
+//                        .setParameter("id", doctorId).getSingleResult());
+        entityManager.createQuery("delete from Doctor where id = :id ")
+                .setParameter("id", doctorId)
+                .executeUpdate();
+    }
+
+    @Override
+    public List<Department> getDepartments(Long doctorId) {
+        return entityManager
+                .createQuery("from Department d join d.doctors doc where doc.id = :id",
+                        Department.class)
+                .setParameter("id", doctorId)
+                .getResultList();
+    }
+
+    @Override
+    public void assignToDepartment(Doctor doctor) {
+        entityManager.merge(doctor);
+    }
+
+    @Override
+    public void deleteDepartment(Doctor doctor) {
+        entityManager.merge(doctor);
+    }
+
+    @Override
+    public List<Appointment> getAppointments(Long doctorId) {
+        return entityManager
+                .createQuery("from Appointment a join a.doctor d where d.id = :id",
+                        Appointment.class)
+                .setParameter("id", doctorId)
+                .getResultList();
     }
 }

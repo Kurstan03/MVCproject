@@ -1,6 +1,7 @@
 package peaksoft.service;
 
 import peaksoft.entity.Department;
+import peaksoft.entity.Doctor;
 
 import java.util.List;
 
@@ -19,4 +20,5 @@ public interface DepartmentService {
 
     Department findById(Long departmentId);
 
+    List<Doctor> getDoctors(Long id, Long departmentId);
 }

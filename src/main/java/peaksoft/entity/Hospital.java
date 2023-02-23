@@ -1,6 +1,8 @@
 package peaksoft.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,8 +31,14 @@ public class Hospital {
             allocationSize = 1
     )
     private Long id;
+
+    @Size(min = 2, max = 33, message = "Name should be between 2 and 33 characters!")
+    @NotEmpty(message = "Name should not be empty!")
     private String name;
+    @NotEmpty(message = "Address should not be empty!")
     private String address;
+    @Column(length = 90000)
+    private String image;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "hospital")
     private List<Doctor> doctors;
 

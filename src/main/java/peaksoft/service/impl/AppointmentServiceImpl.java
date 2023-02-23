@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import peaksoft.entity.Appointment;
 import peaksoft.entity.Hospital;
+import peaksoft.exeptions.NotFoundException;
 import peaksoft.repository.*;
 import peaksoft.service.AppointmentService;
 
@@ -42,11 +43,20 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
     @Override
     public void save(Long hospitalId, Appointment appointment) {
-        Hospital hospital = hospitalRepository.getById(hospitalId);
+        Hospital hospital = hospitalRepository.getById(hospitalId)
+                .orElseThrow(
+                        ()-> new NotFoundException("Hospital by id " + hospitalId + " not found"));;
 
-        appointment.setDoctor(doctorRepository.findById(appointment.getDoctorId()));
-        appointment.setPatient(patientRepository.getById(appointment.getPatientId()));
-        appointment.setDepartment(departmentRepository.findById(appointment.getDepartmentId()));
+        appointment.setDoctor(doctorRepository
+                .findById(appointment.getDoctorId()).orElseThrow(
+                        ()-> new RuntimeException("Doctor not found")));
+        appointment.setPatient(patientRepository
+                .getById(appointment.getPatientId()).orElseThrow(
+                        ()-> new NotFoundException("Patient not found")));
+        appointment.setDepartment(departmentRepository
+                .findById(appointment.getDepartmentId()).orElseThrow(
+                        ()-> new NotFoundException("Department not found")
+                ));
 
         hospital.addAppointment(appointment);
         appointment.getPatient().addAppointment(appointment);
@@ -56,6 +66,35 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public Appointment findById(Long appointmentId) {
-        return null;
+        return appointmentRepository
+                .findById(appointmentId).orElseThrow(
+                        ()-> new NotFoundException("Appointment by id " + appointmentId +
+                                " not found"));
+    }
+
+    @Override
+    public void update(Long appointmentId, Appointment appointment) {
+        appointment.setDoctor(doctorRepository.findById(appointment.getDoctorId())
+                .orElseThrow(()-> new NotFoundException("Doctor not found")));
+        appointment.setPatient(patientRepository.getById(appointment.getPatientId())
+                .orElseThrow(()-> new NotFoundException("Patient not found")));
+        appointment.setDepartment(departmentRepository.findById(appointment.getDepartmentId())
+                .orElseThrow(()-> new NotFoundException("Department not found")));
+        appointmentRepository.update(appointmentId, appointment);
+    }
+
+    @Override
+    public void delete(Long id, Long appointmentId) {
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(
+                ()-> new NotFoundException("Appointment by id " + appointmentId +
+                        " not found"));
+        hospitalRepository.getById(id)
+                .orElseThrow(
+                        ()-> new NotFoundException("Hospital by id " + id + " not found"))
+                        .getAppointments().remove(appointment);
+        appointment.getDoctor().setAppointments(null);
+        appointment.getPatient().setAppointments(null);
+        appointmentRepository.delete(appointmentId);
     }
 }

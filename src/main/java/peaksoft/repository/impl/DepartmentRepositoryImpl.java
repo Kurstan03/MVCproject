@@ -5,10 +5,12 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 import peaksoft.entity.Department;
+import peaksoft.entity.Doctor;
 import peaksoft.entity.Hospital;
 import peaksoft.repository.DepartmentRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author kurstan
@@ -45,21 +47,33 @@ public class DepartmentRepositoryImpl implements DepartmentRepository {
                 .getSingleResult();
         hospital.addDepartment(department);
         department.setHospital(hospital);
-        entityManager.persist(department);
+        entityManager.merge(department);
     }
 
     @Override
     public void delete(Long departmentId) {
-        entityManager.remove(
-                entityManager.createQuery("from Department where id = :id", Department.class)
-                        .setParameter("id", departmentId).getSingleResult()
-        );
+//        entityManager.remove(
+//                entityManager.createQuery("from Department where id = :id", Department.class)
+//                        .setParameter("id", departmentId).getSingleResult()
+//        );
+        entityManager.createQuery("delete from Department where id = :id")
+                .setParameter("id", departmentId)
+                .executeUpdate();
     }
 
     @Override
-    public Department findById(Long departmentId) {
-        return entityManager.createQuery("from Department where id = :id", Department.class)
-                .setParameter("id", departmentId)
-                .getSingleResult();
+    public Optional<Department> findById(Long departmentId) {
+//        return entityManager.createQuery("from Department where id = :id", Department.class)
+//                .setParameter("id", departmentId)
+//                .getSingleResult();
+        Department department = entityManager.find(Department.class, departmentId);
+        return Optional.ofNullable(department);
+    }
+
+    @Override
+    public List<Doctor> getDoctors(Long departmentId) {
+        return entityManager
+                .createQuery("from Doctor doc join doc.departments dep where dep.id = :id",
+                        Doctor.class).setParameter("id", departmentId).getResultList();
     }
 }

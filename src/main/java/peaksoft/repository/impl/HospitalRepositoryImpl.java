@@ -8,6 +8,7 @@ import peaksoft.entity.Hospital;
 import peaksoft.repository.HospitalRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author kurstan
@@ -37,19 +38,30 @@ public class HospitalRepositoryImpl implements HospitalRepository {
     }
 
     @Override
-    public Hospital getById(Long id) {
-        return entityManager
-                .createQuery("from Hospital where id = :id", Hospital.class)
-                .setParameter("id", id)
-                .getSingleResult();
+    public Optional<Hospital> getById(Long id) {
+//        entityManager
+//                .createQuery("from Hospital where id = :id", Hospital.class)
+//                .setParameter("id", id)
+//                .getSingleResult();
+        Hospital hospital = entityManager.find(Hospital.class, id);
+        return Optional.ofNullable(hospital);
     }
 
     @Override
     public void update(Long id, Hospital hospital) {
-        entityManager.createQuery("update Hospital set name = :n, address = :a where id = :id")
+        entityManager.createQuery("update Hospital set name = :n, address = :a, " +
+                        "image = :i where id = :id")
                 .setParameter("n", hospital.getName())
                 .setParameter("a", hospital.getAddress())
+                .setParameter("i", hospital.getImage())
                 .setParameter("id", id)
                 .executeUpdate();
+    }
+
+    @Override
+    public List<Hospital> search(String keyWord) {
+        return entityManager.createQuery("from Hospital where name ilike (:keyWord)", Hospital.class)
+                .setParameter("keyWord", "%"+keyWord+"%")
+                .getResultList();
     }
 }

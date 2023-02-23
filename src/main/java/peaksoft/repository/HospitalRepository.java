@@ -3,6 +3,7 @@ package peaksoft.repository;
 import peaksoft.entity.Hospital;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author kurstan
@@ -15,7 +16,9 @@ public interface HospitalRepository {
 
     void delete(Long id);
 
-    Hospital getById(Long id);
+    Optional<Hospital> getById(Long id);
 
     void update(Long id, Hospital hospital);
+
+    List<Hospital> search(String keyWord);
 }

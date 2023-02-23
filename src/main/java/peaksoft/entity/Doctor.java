@@ -1,6 +1,9 @@
 package peaksoft.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,14 +35,28 @@ public class Doctor {
             allocationSize = 1
     )
     private Long id;
+    @NotEmpty(message = "First name should not be empty!")
+    @Size(min = 2, max = 33, message = "First name should be between 2 and 33 characters!")
     private String firstName;
+    @NotEmpty(message = "Last name should not be empty!")
+    @Size(min = 2, max = 33, message = "Last name should be between 2 and 33 characters!")
     private String lastName;
+    @NotEmpty(message = "Position should not be empty!")
     private String position;
+    @NotEmpty(message = "Email should not be empty!")
+    @Email(message = "Please provide a valid email address!")
+    @Column(name = "email", unique = true)
     private String email;
     @ManyToOne(cascade = {REFRESH, DETACH, MERGE, PERSIST})
     private Hospital hospital;
-    @ManyToMany(mappedBy = "doctors", cascade = {REFRESH, DETACH, MERGE, PERSIST})
+    @ManyToMany(cascade = {REFRESH, DETACH, MERGE, PERSIST})
     private List<Department> departments;
+    public void addDepartment(Department department){
+        if (departments == null){
+            departments = new ArrayList<>();
+        }
+        departments.add(department);
+    }
     @OneToMany(mappedBy = "doctor", cascade = ALL, fetch = FetchType.EAGER)
     private List<Appointment> appointments;
     public void addAppointment(Appointment appointment){
@@ -48,4 +65,6 @@ public class Doctor {
         }
         appointments.add(appointment);
     }
+    @Transient
+    private Long departmentId;
 }

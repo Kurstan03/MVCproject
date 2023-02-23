@@ -1,6 +1,9 @@
 package peaksoft.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,6 +33,8 @@ public class Appointment {
             allocationSize = 1
     )
     private Long id;
+    @NotNull(message = "date should not be empty!")
+    @Future(message = "date must be future time!")
     private LocalDate date;
     @ManyToOne(cascade = {REFRESH, DETACH, MERGE, PERSIST}, fetch = FetchType.EAGER)
     private Patient patient;
@@ -38,9 +43,12 @@ public class Appointment {
     @ManyToOne(cascade = {REFRESH, DETACH, MERGE, PERSIST}, fetch = FetchType.EAGER)
     private Department department;
     @Transient
+    @NotNull(message = "select patient!")
     private Long patientId;
     @Transient
+    @NotNull(message = "select doctor!")
     private Long doctorId;
     @Transient
+    @NotNull(message = "select department!")
     private Long departmentId;
 }

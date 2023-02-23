@@ -9,25 +9,32 @@
         crossorigin="anonymous">
 </head>
 <body>
-<div class="d-flex justify-content-center">
-  <form class="p-5 bg-light" th:action="@{/{id}/doctors/{doctorId}/update(id=${id}, doctorId=${oldDoctor.getId()})}" th:object="${oldDoctor}" th:method="patch">
+<div style="margin-top: 40px" class="d-flex justify-content-center">
+  <form class="p-5 bg-light" th:action="@{/{id}/doctors/{doctorId}/update(id=${id}, doctorId=${doctor.getId()})}" th:object="${doctor}" th:method="patch">
     <input type="hidden" th:field="*{id}">
 
     <div class="form-group">
       <label for="name" class="form-label">first name</label>
       <input type="text" th:field="*{firstName}" id="name" class="form-control form-control-lg">
+      <p style="color: red;" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">first name error</p>
     </div>
     <div class="form-group">
       <label for="last" class="form-label">last name</label>
       <input type="text" th:field="*{lastName}" id="last" class="form-control form-control-lg">
+      <p style="color: red;" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">last name error</p>
     </div>
     <div class="form-group">
       <label for="phone" class="form-label">position</label>
       <input type="text" th:field="*{position}" id="phone" class="form-control form-control-lg">
+      <p style="color: red;" th:if="${#fields.hasErrors('position')}" th:errors="*{position}">position error</p>
     </div>
     <div class="form-group">
       <label for="email" class="form-label">email</label>
       <input type="text" th:field="*{email}" id="email" class="form-control form-control-lg">
+      <p style="color: red;" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email error</p>
+    </div>
+    <div th:if="${Email}">
+      <p style="color: red;">[[${Email}]]</p>
     </div>
     <br>
     <div>

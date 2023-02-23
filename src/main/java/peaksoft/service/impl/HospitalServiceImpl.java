@@ -3,6 +3,7 @@ package peaksoft.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import peaksoft.entity.Hospital;
+import peaksoft.exeptions.NotFoundException;
 import peaksoft.repository.HospitalRepository;
 import peaksoft.service.HospitalService;
 
@@ -38,11 +39,22 @@ public class HospitalServiceImpl implements HospitalService {
 
     @Override
     public Hospital getById(Long id) {
-        return hospitalRepository.getById(id);
+        return hospitalRepository
+                .getById(id).orElseThrow(
+                        ()-> new NotFoundException("Hospital by id " + id + " not found"));
     }
 
     @Override
     public void update(Long id, Hospital hospital) {
         hospitalRepository.update(id, hospital);
+    }
+
+    @Override
+    public List<Hospital> getAllHospitals(String keyWord) {
+        if (keyWord != null && !keyWord.trim().isEmpty()){
+           return hospitalRepository.search(keyWord);
+        } else {
+            return hospitalRepository.getAllHospitals();
+        }
     }
 }

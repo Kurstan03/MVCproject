@@ -18,4 +18,6 @@ public interface HospitalService {
     Hospital getById(Long id);
 
     void update(Long id, Hospital hospital);
+
+    List<Hospital> getAllHospitals(String keyWord);
 }

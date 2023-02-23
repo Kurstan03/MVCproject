@@ -9,6 +9,7 @@ import peaksoft.entity.Patient;
 import peaksoft.repository.PatientRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -36,14 +37,16 @@ public class PatientRepositoryImpl implements PatientRepository {
                 .getSingleResult();
         patient.setHospital(hospital);
         hospital.addPatient(patient);
-        entityManager.persist(hospital);
+        entityManager.merge(hospital);
     }
 
     @Override
-    public Patient getById(Long patientId) {
-        return entityManager.createQuery("from Patient where id = :id", Patient.class)
-                .setParameter("id", patientId)
-                .getSingleResult();
+    public Optional<Patient> getById(Long patientId) {
+//        return entityManager.createQuery("from Patient where id = :id", Patient.class)
+//                .setParameter("id", patientId)
+//                .getSingleResult();
+        Patient patient = entityManager.find(Patient.class, patientId);
+        return Optional.ofNullable(patient);
     }
 
     @Override
@@ -61,11 +64,13 @@ public class PatientRepositoryImpl implements PatientRepository {
 
     @Override
     public void delete(Long patientId) {
-        entityManager
-                .remove(entityManager
-                        .createQuery("from Patient where id = :id", Patient.class)
-                        .setParameter("id", patientId)
-                        .getSingleResult()
-                );
+//        entityManager
+//                .remove(entityManager
+//                        .createQuery("from Patient where id = :id", Patient.class)
+//                        .setParameter("id", patientId)
+//                        .getSingleResult()
+//                );
+        entityManager.createQuery("delete from Patient where id = :id")
+                .setParameter("id", patientId).executeUpdate();
     }
 }

@@ -3,6 +3,7 @@ package peaksoft.repository;
 import peaksoft.entity.Patient;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author kurstan
@@ -13,7 +14,7 @@ public interface PatientRepository {
 
     void save(Long hospitalId, Patient patient);
 
-    Patient getById(Long patientId);
+    Optional<Patient> getById(Long patientId);
 
     void update(Long patientId, Patient patient);
 

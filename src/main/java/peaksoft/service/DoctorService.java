@@ -1,8 +1,9 @@
 package peaksoft.service;
 
+import peaksoft.entity.Appointment;
+import peaksoft.entity.Department;
 import peaksoft.entity.Doctor;
 
-import javax.print.Doc;
 import java.util.List;
 
 /**
@@ -19,4 +20,14 @@ public interface DoctorService {
     void update(Long doctorId, Doctor doctor);
 
     void delete(Long doctorId);
+
+    List<Department> getDepartments(Long doctorId);
+
+    void assignToDepartment(Long doctorId, Doctor doctor);
+
+    void deleteDepartment(Long doctorId, Long departmentId);
+
+    List<Appointment> getAppointments(Long doctorId);
+    List<Department> getCanBeAssignDepartments(Long doctorId);
+
 }

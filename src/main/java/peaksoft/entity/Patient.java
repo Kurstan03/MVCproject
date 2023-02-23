@@ -1,9 +1,11 @@
 package peaksoft.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Check;
 import peaksoft.enums.Gender;
 
 import java.util.ArrayList;
@@ -32,13 +34,25 @@ public class Patient {
             allocationSize = 1
     )
     private Long id;
+    @NotEmpty(message = "First name should not be empty!")
+    @Size(min = 2, max = 33, message = "First name should be between 2 and 33 characters!")
     @Column(name = "first_name")
     private String firstName;
+    @NotEmpty(message = "Last name should not be empty!")
+    @Size(min = 2, max = 33, message = "Last name should be between 2 and 33 characters!")
     @Column(name = "last_name")
     private String lastName;
+
     @Column(name = "phone_number")
+    @NotEmpty(message = "Phone number should not be empty!")
+    @Pattern(regexp = "\\+996\\d{9}", message = "Phone number should start with +996 and consist of 13 characters!")
     private String phoneNumber;
+    @NotNull(message = "Choice gender!")
+    @Enumerated(EnumType.STRING)
     private Gender gender;
+    @NotEmpty(message = "Email should not be empty!")
+    @Email(message = "Please provide a valid email address!")
+    @Column(name = "email", unique = true)
     private String email;
 
     @ManyToOne(cascade = {REFRESH, DETACH, MERGE, PERSIST})

@@ -1,8 +1,10 @@
 package peaksoft.repository;
 
 import peaksoft.entity.Department;
+import peaksoft.entity.Doctor;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author kurstan
@@ -17,6 +19,7 @@ public interface DepartmentRepository {
 
     void delete(Long departmentId);
 
-    Department findById(Long departmentId);
+    Optional<Department> findById(Long departmentId);
 
+    List<Doctor> getDoctors(Long departmentId);
 }

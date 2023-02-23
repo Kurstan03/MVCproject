@@ -9,17 +9,23 @@
           crossorigin="anonymous">
 </head>
 <body>
-<div class="d-flex justify-content-center">
-    <form class="p-5 bg-light" th:action="@{/hospitals/save}" th:object="${newHospital}" th:method="post">
+<div  style="margin-top: 150px" class="d-flex justify-content-center">
+    <form class="p-5 bg-light" th:action="@{/hospitals/save}" th:object="${hospital}" th:method="post">
 <!--        <input type="hidden" th:field="*{id}">-->
 
         <div class="form-group">
             <label for="name" class="form-label">name</label>
             <input type="text" th:field="*{name}" id="name" class="form-control form-control-lg">
+            <p style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</p>
         </div>
         <div class="form-group">
             <label for="input" class="form-label">address</label>
             <input type="text" th:field="*{address}" id="input" class="form-control form-control-lg">
+            <p style="color: red" th:if="${#fields.hasErrors('address')}" th:errors="*{address}">Address error</p>
+        </div>
+        <div class="form-group">
+            <label for="image" class="form-label">image</label>
+            <input type="text" th:field="*{image}" id="image" class="form-control form-control-lg">
         </div>
         <div>
             <br>

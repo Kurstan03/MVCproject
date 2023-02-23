@@ -1,8 +1,12 @@
 package peaksoft.repository;
 
+import peaksoft.entity.Appointment;
+import peaksoft.entity.Department;
 import peaksoft.entity.Doctor;
+import peaksoft.entity.Hospital;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author kurstan
@@ -13,9 +17,17 @@ public interface DoctorRepository {
 
     void save(Long id, Doctor doctor);
 
-    Doctor findById(Long doctorId);
+    Optional<Doctor> findById(Long doctorId);
 
     void update(Long doctorId, Doctor doctor);
 
-    void delete(Long doctorId);
+    void delete(Long doctorId, Hospital hospital);
+
+    List<Department> getDepartments(Long doctorId);
+
+    void assignToDepartment(Doctor doctor);
+
+    void deleteDepartment(Doctor doctor);
+
+    List<Appointment> getAppointments(Long doctorId);
 }

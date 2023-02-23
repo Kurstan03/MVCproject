@@ -35,34 +35,41 @@
   </style>
 </head>
 <body>
-<div class="d-flex justify-content-center">
-  <form class="p-5 bg-light" th:action="@{/{id}/appointments/save(id=${id})}" th:object="${newAppointment}" th:method="post">
+<div style="margin-top: 120px" class="d-flex justify-content-center">
+  <form class="p-5 bg-light" th:action="@{/{id}/appointments/save(id=${id})}" th:object="${appointment}" th:method="post">
     <input type="hidden" th:field="*{id}">
 
     <div class="form-group">
-      <label for="myDate" class="date-label"></label>
-      <input type="date" id="myDate" name="myDate" class="date-input" th:field="*{date}">
+      <label for="myDate" class="date-label">Date:</label>
+      <input style="margin-left: 50px" type="date" id="myDate" name="myDate" class="date-input" th:field="*{date}">
+      <p style="color: red" th:if="${#fields.hasErrors('date')}" th:errors="*{date}">Date error</p>
     </div>
     <br>
     <div class="form-group">
-      <select style="text-align:center;" th:field="*{doctorId}" class="date-input">
-        <option value="">select doctor</option>
-        <option class="date-input" th:each="doctor : ${doctors}" th:value="${doctor.getId()}" th:text="${doctor.getFirstName()+' '+doctor.getLastName()}"></option>
-      </select>
-    </div>
-    <br>
-    <div class="form-group">
-      <select style="text-align:center;" th:field="*{patientId}" class="date-input">
+      <label for="pat" class="date-label">Patient:</label>
+      <select style="margin-left: 35px" id="pat"  th:field="*{patientId}" class="date-input">
         <option value="">select patient</option>
         <option class="date-input" th:each="patient : ${patients}" th:value="${patient.getId()}" th:text="${patient.getFirstName()+' '+patient.getLastName()}"></option>
       </select>
+      <p style="color: red" th:if="${#fields.hasErrors('patientId')}" th:errors="*{patientId}">Patient error</p>
     </div>
     <br>
     <div class="form-group">
-      <select style="text-align:center;" th:field="*{departmentId}" class="date-input">
+      <label for="dep" class="date-label">Department:</label>
+      <select id="dep" style="text-align:center;" th:field="*{departmentId}" class="date-input">
         <option value="">select department</option>
         <option class="date-input" th:each="department : ${departments}" th:value="${department.getId()}" th:text="${department.getName()}"></option>
       </select>
+      <p style="color: red" th:if="${#fields.hasErrors('departmentId')}" th:errors="*{departmentId}">Department error</p>
+    </div>
+    <br>
+    <div class="form-group">
+      <label for="doc" class="date-label">Doctor:</label>
+      <select style="margin-left: 40px"  id="doc"  th:field="*{doctorId}" class="date-input">
+        <option value="" >select</option>
+        <option class="date-input"  th:each="doctor : ${doctors}" th:value="${doctor.getId()}" th:text="${doctor.getFirstName()+' '+doctor.getLastName()}"></option>
+      </select>
+      <p style="color: red" th:if="${#fields.hasErrors('doctorId')}" th:errors="*{doctorId}">Doctor error</p>
     </div>
     <div>
       <br>

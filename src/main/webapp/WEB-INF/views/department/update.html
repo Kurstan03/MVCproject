@@ -9,15 +9,19 @@
           crossorigin="anonymous">
 </head>
 <body>
-<div class="d-flex justify-content-center">
+<div style="margin-top: 150px" class="d-flex justify-content-center">
     <form class="p-5 bg-light"
-          th:action="@{/{id}/departments/{departmentId}/update(id=${id}, departmentId=${olDepartment.getId()})}"
-          th:object="${olDepartment}" th:method="patch">
+          th:action="@{/{id}/departments/{departmentId}/update(id=${id}, departmentId=${department.getId()})}"
+          th:object="${department}" th:method="patch">
         <input type="hidden" th:field="*{id}">
 
         <div class="form-group">
             <label for="name" class="form-label">name</label>
             <input type="text" th:field="*{name}" id="name" class="form-control form-control-lg">
+            <p style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</p>
+        </div>
+        <div th:if="${Name}">
+            <p style="color: red;">[[${Name}]]</p>
         </div>
         <div>
             <br>
